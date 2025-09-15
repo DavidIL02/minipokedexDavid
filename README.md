@@ -1,145 +1,145 @@
-Mini Pokédex ⚡ (React + TypeScript + Vite)
+    Mini Pokédex (React + TypeScript + Vite)
 
-Proyecto personal centrado en buenas prácticas: TypeScript estricto, separación por capas (servicios, hooks, componentes) y una UX clara con estados de carga/error.
-
-Este README cubre desarrollo local y pruebas. El despliegue a GitHub Pages se documentará más adelante.
+Proyecto personal centrado en buenas prácticas de Frontend: TypeScript estricto, separación por capas (servicios, hooks, componentes) y una UX clara con gestión de carga y error.
 
 Autor: David Ibáñez Leal
 
-✨ Features
+Este documento se centra en desarrollo local y pruebas. El despliegue (GitHub Pages) se añadirá más adelante.
+
+    Características
 
 Listado paginado de Pokémon (20 por página).
 
 Búsqueda por nombre con debounce (400 ms) y cancelación de peticiones.
 
-Modal de detalle (intenta upgrade de lite → full al abrir).
+Modal de detalle (intento de upgrade de lite → full al abrir).
 
-Código ordenado y tipado: services (API), hooks (datos), components (UI).
+Código organizado y tipado: services (API), hooks (datos/estado) y components (UI).
 
-🧰 Stack
+Stack técnico
 
 React 18 + TypeScript
 
-Vite (dev server rápido + build con Rollup)
+Vite (servidor de desarrollo y build con Rollup)
 
-CSS sencillo en index.css (sin frameworks)
+CSS plano en index.css (sin frameworks)
 
 lodash.debounce para el buscador
 
-🧱 Arquitectura (visión rápida)
+    Arquitectura (visión general)
 
-src/main.tsx: punto de entrada. Monta <App /> con React.StrictMode.
+src/main.tsx: punto de entrada. Monta App dentro de React.StrictMode.
 
-src/App.tsx: orquestador de UI (búsqueda → lista → paginación → modal) usando usePokemon.
+src/App.tsx: orquestador de UI (búsqueda → lista → paginación → modal) apoyado en usePokemon.
 
-src/hooks/usePokemon.ts: estado/datos (página, query, lista, total, loading/error) + AbortController.
+src/hooks/usePokemon.ts: estado/datos (página, query, lista, total, loading/error) con AbortController para evitar carreras.
 
 src/services/api.ts:
 
-fetchPokemonPage → lista paginada (enriquece con sprite/tipos).
+fetchPokemonPage: lista paginada (enriquecida con sprite y tipos).
 
-fetchPokemonByName → detalle completo por nombre.
+fetchPokemonByName: detalle completo por nombre.
 
-src/components/* (UI semántica + a11y):
+src/components/\* (UI semántica y accesible):
 
-SearchBar (debounce + cleanup),
+SearchBar (debounce con limpieza),
 
-PokemonList / PokemonCard (<ul>/<li> + <button> accesible),
+PokemonList / PokemonCard (<ul>/<li> + <button>),
 
 Pagination (<nav aria-label="Paginación">, aria-live),
 
-PokemonModal (role="dialog", aria-modal, Esc para cerrar).
+PokemonModal (role="dialog", aria-modal, cierre con Escape).
 
-🗂️ Estructura de carpetas
+    Estructura de carpetas
 src/
-  components/
-    Pagination.tsx
-    PokemonCard.tsx
-    PokemonList.tsx
-    PokemonModal.tsx
-    SearchBar.tsx
-  hooks/
-    usePokemon.ts
-  services/
-    api.ts
-  types.ts
-  index.css
-  App.tsx
-  main.tsx
+components/
+Pagination.tsx
+PokemonCard.tsx
+PokemonList.tsx
+PokemonModal.tsx
+SearchBar.tsx
+hooks/
+usePokemon.ts
+services/
+api.ts
+types.ts
+index.css
+App.tsx
+main.tsx
 
-🧠 Cómo funciona (overview)
+    Flujo de datos (resumen)
 
-Search → SearchBar controla el input y dispara onChange con debounce (400 ms).
-App hace setPage(0) + setQuery(val).
+Búsqueda
+SearchBar controla el valor del input y emite onChange con debounce (400 ms).
+App resetea a la primera página y actualiza query.
 
-Datos → usePokemon escucha page/query:
+Carga de datos
+usePokemon observa page y query:
 
-Con query → fetchPokemonByName (1 resultado).
+Con query: fetchPokemonByName (un único resultado).
 
-Sin query → fetchPokemonPage({ limit, offset }).
+Sin query: fetchPokemonPage({ limit, offset }).
+Siempre cancela la petición previa con AbortController.
 
-Cancela la petición anterior con AbortController para evitar carreras.
+Listado
+Se muestran tarjetas lite (id, nombre, sprite, tipos).
+Se usa skeleton para evitar saltos de maquetación.
 
-Lista → tarjetas lite (id, name, sprite, types…). Skeleton evita saltos (CLS).
+Detalle
+Al seleccionar una tarjeta, App intenta actualizar de lite a full con fetchPokemonByName.
+Si falla, muestra el lite como fallback.
 
-Detalle → al seleccionar, App intenta upgrade via fetchPokemonByName; si falla, muestra el lite (UX robusta).
+Paginación
+Solo se muestra cuando no hay query.
+Botones con disabled y texto con aria-live="polite".
 
-Paginación → solo sin query. Botones con disabled y texto con aria-live="polite".
+    Requisitos
 
-🚀 Arranque rápido
+Node.js 20 o superior
 
-Requisitos
-
-Node.js 20+
+Comprobación rápida:
 
 node -v
 
+    Puesta en marcha
 
-Instalar y levantar
+Instalación y desarrollo:
 
-npm ci        # o `npm install`
-npm run dev   # abre Vite en local
+npm ci # o: npm install
+npm run dev # arranca Vite en local
 
-
-Build de producción
+Build de producción y previsualización:
 
 npm run build
 npm run preview
 
+No se requieren variables de entorno en esta fase. API base: https://pokeapi.co/api/v2.
 
-No hay variables de entorno en esta fase. API base: https://pokeapi.co/api/v2.
+    Estilos y accesibilidad
 
-🎨 Estilos & Accesibilidad
+Sin estilos inline; clases centralizadas en index.css (p. ej. .grid, .card, .badge, .modal\*, .button, .input, .skeleton).
 
-Sin estilos inline; clases en index.css (.grid, .card, .badge, .modal*, .button, .input, .skeleton, etc.).
+Semántica: listas (<ul>/<li>), botones (<button>), navegación (<nav>).
 
-Semántica: <ul>/<li> para listas, <button> para acciones, <nav> para paginación.
+Accesibilidad: aria-label en controles, aria-modal en el modal, cierre con Escape, realce de foco con :focus-visible.
 
-A11y: aria-label en controles, aria-modal en el modal, cierre con Esc, :focus-visible visible.
+    Pruebas (pendiente)
 
-🧪 Pruebas (roadmap corto)
+Sugerencias para una primera batería (Vitest + React Testing Library):
 
-Pendiente de implementar (ideas):
+PokemonCard: render y callback de clic.
 
-Smoke tests (Vitest + React Testing Library):
+Pagination: estados disabled en límites (primera/última página).
 
-PokemonCard (render + click),
-
-Pagination (prev/next disabled en límites),
-
-SearchBar (debounce con fake timers),
+SearchBar: debounce con fake timers.
 
 Flujo de abrir/cerrar modal.
 
-🚧 Limitaciones & mejoras
+    Limitaciones y mejoras
 
 N+1 en fetchPokemonPage (lista + N detalles).
-Mejora: derivar id desde url, construir official-artwork sin pedir detalle y pedir full sólo al abrir el modal.
+Posible mejora: derivar id desde url, construir official-artwork sin pedir detalle y solicitar el full únicamente al abrir el modal.
 
-Cache de detalle por nombre para reabrir sin re-fetch.
+Cachear detalle por nombre para reabrir sin nueva petición.
 
-GitHub Pages y CI (lint, type-check, build) como siguiente paso.
-
-🪪 Licencia
-
-MIT — © David Ibáñez Leal
+Añadir CI (lint, type-check, build) y despliegue a GitHub Pages.
