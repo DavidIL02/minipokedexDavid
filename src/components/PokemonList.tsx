@@ -1,19 +1,28 @@
+/**
+ * Grid de resultados con semántica de lista:
+ * - <ul>/<li> en lugar de <div> sueltos.
+ * - Renderiza PokemonCard por cada elemento.
+ * - Mensaje vacío cuando no hay items.
+ */
 import type { PokemonLite } from "../types";
 import PokemonCard from "./PokemonCard";
 
 type Props = {
-  items: PokemonLite[];
-  onSelect: (p: PokemonLite) => void;
+  items: PokemonLite[];               // lista de pokémon (lite)
+  onSelect: (p: PokemonLite) => void; // callback al hacer click en una card
 };
 
-// grid de resultados o vacío si no hay
 export default function PokemonList({ items, onSelect }: Props) {
-  if (!items?.length) return <p>No hay resultados.</p>;
+  // Empty state simple y claro
+  if (!items?.length) return <p className="empty">No hay resultados.</p>;
+
   return (
-    <div className="grid">
+    <ul className="grid">
       {items.map((p) => (
-        <PokemonCard key={p.id} item={p} onClick={onSelect} />
+        <li key={p.id} className="grid__cell">
+          <PokemonCard item={p} onClick={onSelect} />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }

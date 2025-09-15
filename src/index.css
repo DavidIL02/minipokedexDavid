@@ -117,3 +117,54 @@ body {
   opacity: 0.5;
   cursor: not-allowed;
 }
+/* ====== Helpers específicos de App (antes estaban inline/App.css) ====== */
+
+/* Título sin margen */
+.title {
+  margin: 0;
+}
+
+/* Separación vertical estándar para secciones bajo el header */
+.section {
+  margin-top: 12px;
+}
+
+/* Mensajes de error consistentes */
+.error {
+  color: #dc143c; /* crimson */
+  margin-top: 8px;
+}
+
+/* Skeleton grande para cabeceras/listas */
+.skeleton--lg {
+  height: 140px;
+  margin-top: 16px;
+}
+
+/* (Opcional) Mejoras de accesibilidad visual para focus */
+.button:focus-visible,
+.input:focus-visible,
+.card:focus-visible {
+  outline: 3px solid #3b82f6; /* azul accesible */
+  outline-offset: 2px;
+}
+
+/* Ajustes de imagen dentro de tarjeta si usas clase .card__img */
+.card__img {
+  width: 100%;
+  height: 140px;
+  object-fit: contain;
+}
+
+/* Título de la card (capitalizar por CSS) */
+.card__title {
+  margin: 8px 0;
+  text-transform: capitalize;
+}
+
+/* Contenedor de badges dentro de la card */
+.card__badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}

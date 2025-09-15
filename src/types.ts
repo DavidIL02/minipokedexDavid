@@ -7,8 +7,8 @@ export type PokemonLite = {
   name: string;
   sprite: string | null;
   types: string[];
-  height: number;       // nota: la API da decímetros
-  weight: number;       // nota: la API da hectogramos
+  height: number;       // Nota: la API da decímetros
+  weight: number;       // Nota: la API da hectogramos
   base_experience: number;
 };
 
